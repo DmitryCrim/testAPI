@@ -100,5 +100,28 @@ class test_new_location():
         assert check_address_info == "100 Lenina street, RU"
         print("Адрес верный")
 
+        """удаление новой локации"""
+        delete_resource = "/maps/api/place/delete/json"
+        delete_url = base_url + delete_resource + key
+        print(delete_url)
+        json_for_delete_new_location = {
+            "place_id": "4c4452fa0570dcc0f763b0253cac9aa6"
+        }
+        result_delete = requests.delete(delete_url, json=json_for_delete_new_location)
+        print(result_delete.text)
+        print("Статус-код: " + str(result_delete.status_code))
+        assert 200 == result_delete.status_code
+        if result_delete.status_code == 200:
+            print("Успешно!!! Удаление новой локации")
+        else:
+            print("Провал!!! Запрос ошибочный. Локация не удалилась!!!")
+        check_status = result_delete.json()
+        check_status_info = check_status.get("status")
+        print("Сообщение: " + check_status_info)
+        assert check_address_info == "OK"
+        print("Адрес верный")
+
+
+
 new_place = test_new_location()
 new_place.test_create_new_location()
